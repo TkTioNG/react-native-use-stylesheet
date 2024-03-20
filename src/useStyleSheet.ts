@@ -1,21 +1,34 @@
 import { useContext, useMemo } from "react";
 import { PixelRatio, Platform, useWindowDimensions } from "react-native";
-import { MediaQueryContext } from "../contexts";
+import { ExtendedNamedStyles, PossibleQuery } from "./StyleSheet";
+import MediaQueryContext, {
+  MediaQueryConfig,
+  defaultMediaQueryConfig,
+} from "./MediaQueryContext";
 
-export const isInInterval = (value, min, max) =>
+const isInInterval = (value: number, min?: number, max?: number) =>
   (min === undefined || value >= min) && (max === undefined || value <= max);
 
-export const matchMediaQuery = (query, width, height) => {
+const matchMediaQuery = (
+  query: PossibleQuery,
+  width: number,
+  height: number,
+  mediaQueryContext?: Readonly<MediaQueryConfig>
+) => {
   if (!query) {
     return false;
   }
 
   if (typeof query === "string") {
-    if (query === "sm" && width > 400) {
+    const { breakpoint }: MediaQueryConfig = {
+      ...defaultMediaQueryConfig,
+      ...mediaQueryContext,
+    };
+    if (query === "sm" && width > breakpoint.sm) {
       return true;
-    } else if (query === "md" && width > 600) {
+    } else if (query === "md" && width > breakpoint.md) {
       return true;
-    } else if (query === "lg" && width > 800) {
+    } else if (query === "lg" && width > breakpoint.lg) {
       return true;
     }
     return false;
@@ -47,33 +60,40 @@ export const matchMediaQuery = (query, width, height) => {
   );
 };
 
-export const getStylesheet = ({ width, height }, styles) => {
-  const allStyles = {};
-  Object.keys(styles).forEach((styleKey) => {
-    const { mediaQueries, ...style } = styles[styleKey];
-    const mergedStyle = [style];
+const getStylesheet = <
+  T extends ExtendedNamedStyles<T> | ExtendedNamedStyles<any>
+>(
+  styles: T,
+  { width, height }: { width: number; height: number },
+  mediaQueryContext?: Readonly<MediaQueryConfig>
+): T => {
+  return Object.fromEntries(
+    Object.entries(styles).map(([styleKey, styleValue]) => {
+      const { mediaQueries, ...style } = styleValue;
+      const mergedStyle = [style];
 
-    if (mediaQueries?.length) {
-      mediaQueries.forEach((mediaQuery) => {
-        const { query, ...queryStyle } = mediaQuery;
-        if (matchMediaQuery(query, width, height)) {
-          mergedStyle.push(queryStyle);
-        }
-      });
-    }
-    allStyles[styleKey] = mergedStyle.reduce(
-      (acc, cur) => Object.assign(acc, cur),
-      {}
-    );
-  });
-
-  return allStyles;
+      if (mediaQueries?.length) {
+        mediaQueries.forEach((mediaQuery) => {
+          const { query, ...queryStyle } = mediaQuery;
+          if (matchMediaQuery(query, width, height, mediaQueryContext)) {
+            mergedStyle.push(queryStyle);
+          }
+        });
+      }
+      return [
+        styleKey,
+        mergedStyle.reduce((acc, cur) => Object.assign(acc, cur), {}),
+      ];
+    })
+  ) as T;
 };
 
-export default function useStylesheet(styles) {
+export default function useStylesheet<T>(styles: ExtendedNamedStyles<T>) {
   const dimensions = useWindowDimensions();
   const mediaQueryContext = useContext(MediaQueryContext);
-  console.log(mediaQueryContext);
 
-  return useMemo(() => getStylesheet(dimensions, styles), [dimensions, styles]);
+  return useMemo(
+    () => getStylesheet(styles, dimensions, mediaQueryContext),
+    [dimensions, styles]
+  );
 }
