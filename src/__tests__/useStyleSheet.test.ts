@@ -1,8 +1,11 @@
 import { renderHook } from "@testing-library/react-native";
-import useStylesheet from "../useStyleSheet";
+import { useStylesheet } from "..";
 import StyleSheet from "../StyleSheet";
-// import { Dimensions } from "react-native";
 import ReactNative, { Platform } from "react-native";
+
+afterEach(() => {
+  jest.restoreAllMocks();
+});
 
 describe("useStyleSheet", () => {
   it("should return correct styles", () => {
@@ -271,7 +274,6 @@ describe("useStyleSheet", () => {
       },
     });
 
-    // xs
     jest.spyOn(ReactNative, "useWindowDimensions").mockImplementation(() => ({
       width: 100,
       height: 100,
@@ -286,7 +288,6 @@ describe("useStyleSheet", () => {
     let { result } = renderHook(() => useStylesheet(styles));
     expect(result.current).toStrictEqual(expected);
 
-    // sm
     jest.spyOn(ReactNative, "useWindowDimensions").mockImplementation(() => ({
       width: 400,
       height: 400,
@@ -301,7 +302,6 @@ describe("useStyleSheet", () => {
     ({ result } = renderHook(() => useStylesheet(styles)));
     expect(result.current).toStrictEqual(expected);
 
-    // md
     jest.spyOn(ReactNative, "useWindowDimensions").mockImplementation(() => ({
       width: 600,
       height: 600,
@@ -316,7 +316,6 @@ describe("useStyleSheet", () => {
     ({ result } = renderHook(() => useStylesheet(styles)));
     expect(result.current).toStrictEqual(expected);
 
-    // lg
     jest.spyOn(ReactNative, "useWindowDimensions").mockImplementation(() => ({
       width: 800,
       height: 800,
@@ -343,7 +342,6 @@ describe("useStyleSheet", () => {
       },
     });
 
-    // xs
     jest.spyOn(ReactNative, "useWindowDimensions").mockImplementation(() => ({
       width: 50,
       height: 100,
@@ -358,7 +356,6 @@ describe("useStyleSheet", () => {
     let { result } = renderHook(() => useStylesheet(styles));
     expect(result.current).toStrictEqual(expected);
 
-    // sm
     jest.spyOn(ReactNative, "useWindowDimensions").mockImplementation(() => ({
       width: 100,
       height: 100,
@@ -373,7 +370,6 @@ describe("useStyleSheet", () => {
     ({ result } = renderHook(() => useStylesheet(styles)));
     expect(result.current).toStrictEqual(expected);
 
-    // md
     jest.spyOn(ReactNative, "useWindowDimensions").mockImplementation(() => ({
       width: 150,
       height: 100,
@@ -388,7 +384,6 @@ describe("useStyleSheet", () => {
     ({ result } = renderHook(() => useStylesheet(styles)));
     expect(result.current).toStrictEqual(expected);
 
-    // lg
     jest.spyOn(ReactNative, "useWindowDimensions").mockImplementation(() => ({
       width: 201,
       height: 100,
@@ -415,7 +410,6 @@ describe("useStyleSheet", () => {
       },
     });
 
-    // xs
     jest.spyOn(ReactNative.PixelRatio, "get").mockImplementation(() => 0.5);
     let expected = {
       style1: {
@@ -425,7 +419,6 @@ describe("useStyleSheet", () => {
     let { result } = renderHook(() => useStylesheet(styles));
     expect(result.current).toStrictEqual(expected);
 
-    // sm
     jest.spyOn(ReactNative.PixelRatio, "get").mockImplementation(() => 1);
     expected = {
       style1: {
@@ -435,7 +428,6 @@ describe("useStyleSheet", () => {
     ({ result } = renderHook(() => useStylesheet(styles)));
     expect(result.current).toStrictEqual(expected);
 
-    // md
     jest.spyOn(ReactNative.PixelRatio, "get").mockImplementation(() => 1.5);
     expected = {
       style1: {
@@ -445,7 +437,6 @@ describe("useStyleSheet", () => {
     ({ result } = renderHook(() => useStylesheet(styles)));
     expect(result.current).toStrictEqual(expected);
 
-    // lg
     jest.spyOn(ReactNative.PixelRatio, "get").mockImplementation(() => 2.5);
     expected = {
       style1: {
@@ -535,6 +526,55 @@ describe("useStyleSheet", () => {
     expected = {
       style1: {
         color: "green",
+      },
+    };
+    ({ result } = renderHook(() => useStylesheet(styles)));
+    expect(result.current).toStrictEqual(expected);
+  });
+
+  it("should chain all queries together", () => {
+    const styles = StyleSheet.create({
+      style1: {
+        flexDirection: "column",
+        mediaQueries: [
+          {
+            query: {
+              breakpoint: "md",
+              minHeight: 300,
+              orientation: "landscape",
+              minPixelRatio: 2,
+            },
+            flexDirection: "row",
+          },
+        ],
+      },
+    });
+
+    // Not match
+    jest.spyOn(ReactNative, "useWindowDimensions").mockImplementation(() => ({
+      width: 600,
+      height: 600,
+      scale: 1.5,
+      fontScale: 1,
+    }));
+    let expected = {
+      style1: {
+        flexDirection: "column",
+      },
+    };
+    let { result } = renderHook(() => useStylesheet(styles));
+    expect(result.current).toStrictEqual(expected);
+
+    // Fully match
+    jest.spyOn(ReactNative, "useWindowDimensions").mockImplementation(() => ({
+      width: 600,
+      height: 300,
+      scale: 2,
+      fontScale: 1,
+    }));
+    expected = {
+      style1: {
+        flexDirection: "row",
       },
     };
     ({ result } = renderHook(() => useStylesheet(styles)));
