@@ -2,11 +2,12 @@ import { ImageStyle, StyleSheet, TextStyle, ViewStyle } from "react-native";
 
 type PossibleStyles = ViewStyle | TextStyle | ImageStyle;
 
-type Breakpoints = "sm" | "md" | "lg";
+export type Breakpoints = "sm" | "md" | "lg";
 
 export type PossibleQuery =
   | Breakpoints
   | {
+      breakpoint?: Breakpoints;
       minWidth?: number;
       maxWidth?: number;
       minHeight?: number;
@@ -17,7 +18,6 @@ export type PossibleQuery =
       maxPixelRatio?: number;
       orientation?: "landscape" | "portrait";
       platform?: "ios" | "android" | "macos" | "windows" | "web";
-      otherCondition?: boolean;
     };
 
 export type ExtendedPossibleStyles = PossibleStyles & {
@@ -29,7 +29,10 @@ export type ExtendedNamedStyles<T> = {
 };
 
 export default {
-  create<T extends ExtendedNamedStyles<T>>(obj: T) {
+  ...StyleSheet,
+  create<T extends ExtendedNamedStyles<T> | ExtendedNamedStyles<any>>(
+    obj: T & ExtendedNamedStyles<any>
+  ) {
     return StyleSheet.create(obj);
   },
 };
