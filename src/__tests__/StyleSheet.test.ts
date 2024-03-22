@@ -1,19 +1,19 @@
-import { StyleSheet as RNStyleSheet } from "react-native";
-import { StyleSheet } from "..";
-import { ExtendedNamedStyles } from "../StyleSheet";
+import { StyleSheet as RNStyleSheet } from 'react-native';
+import { StyleSheet } from '..';
+import type { ExtendedNamedStyles } from '../StyleSheet';
 
-describe("StyleSheet", () => {
-  it("should generate proper style sheet", () => {
+describe('StyleSheet', () => {
+  it('should generate proper style sheet', () => {
     const original = {
       style1: {
         margin: 1,
         padding: 1,
-        backgroundColor: "#ffffff",
+        backgroundColor: '#ffffff',
       },
       style2: {
         fontSize: 1,
-        color: "#000000",
-        flexDirection: "column" as const,
+        color: '#000000',
+        flexDirection: 'column' as const,
       },
     };
     const created = StyleSheet.create(original);
@@ -25,12 +25,12 @@ describe("StyleSheet", () => {
       style1: {
         margin: 1,
         padding: 1,
-        backgroundColor: "#ffffff",
+        backgroundColor: '#ffffff',
       },
       style2: {
         fontSize: 1,
-        color: "#000000",
-        flexDirection: "column" as const,
+        color: '#000000',
+        flexDirection: 'column' as const,
       },
     };
     const rnCreated = RNStyleSheet.create(original);
@@ -38,31 +38,31 @@ describe("StyleSheet", () => {
     expect(created).toStrictEqual(rnCreated);
   });
 
-  it("should preserve mediaQueries from ExtendedNamedStyles<T>", () => {
+  it('should preserve mediaQueries from ExtendedNamedStyles<T>', () => {
     const original: ExtendedNamedStyles<any> = {
       style1: {
         margin: 1,
         padding: 1,
-        backgroundColor: "#ffffff",
+        backgroundColor: '#ffffff',
         mediaQueries: [
           {
-            query: { breakpoint: "md" },
-            backgroundColor: "#000000",
+            query: { breakpoint: 'md' },
+            backgroundColor: '#000000',
           },
           {
-            query: { breakpoint: "lg" },
+            query: { breakpoint: 'lg' },
             padding: 20,
           },
         ],
       },
       style2: {
         fontSize: 1,
-        color: "#000000",
-        flexDirection: "column",
+        color: '#000000',
+        flexDirection: 'column',
         mediaQueries: [
           {
-            query: { breakpoint: "md" },
-            color: "#ffffff",
+            query: { breakpoint: 'md' },
+            color: '#ffffff',
           },
         ],
       },

@@ -1,6 +1,6 @@
-import StyleSheet, { ExtendedNamedStyles } from "./StyleSheet";
-import useStylesheet from "./useStyleSheet";
-import MediaQueryContext from "./MediaQueryContext";
+import StyleSheet, { type ExtendedNamedStyles } from './StyleSheet';
+import useStyleSheet from './useStyleSheet';
+import MediaQueryContext from './MediaQueryContext';
 
-export { StyleSheet, useStylesheet, MediaQueryContext };
+export { StyleSheet, useStyleSheet, MediaQueryContext };
 export type { ExtendedNamedStyles };

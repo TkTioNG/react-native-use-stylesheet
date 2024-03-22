@@ -1,10 +1,14 @@
-import { useContext, useMemo } from "react";
-import { PixelRatio, Platform, useWindowDimensions } from "react-native";
-import { Breakpoints, ExtendedNamedStyles, PossibleQuery } from "./StyleSheet";
+import { useContext, useMemo } from 'react';
+import { PixelRatio, Platform, useWindowDimensions } from 'react-native';
+import type {
+  Breakpoints,
+  ExtendedNamedStyles,
+  PossibleQuery,
+} from './StyleSheet';
 import MediaQueryContext, {
-  MediaQueryConfig,
   defaultMediaQueryConfig,
-} from "./MediaQueryContext";
+  type MediaQueryConfig,
+} from './MediaQueryContext';
 
 const isInInterval = (value: number, min?: number, max?: number) =>
   (min === undefined || value >= min) && (max === undefined || value <= max);
@@ -12,20 +16,20 @@ const isInInterval = (value: number, min?: number, max?: number) =>
 const checkBreakpoint = (
   width: number,
   query?: Breakpoints,
-  mediaQueryContext?: Readonly<MediaQueryConfig>
+  mediaQueryContext?: Partial<Readonly<MediaQueryConfig>>
 ) => {
   if (query === undefined) {
     return true;
   }
-  const { breakpoint }: MediaQueryConfig = {
+  const { breakpoint } = {
     ...defaultMediaQueryConfig,
     ...mediaQueryContext,
   };
-  if (query === "sm" && width >= breakpoint.sm) {
+  if (query === 'sm' && width >= breakpoint.sm) {
     return true;
-  } else if (query === "md" && width >= breakpoint.md) {
+  } else if (query === 'md' && width >= breakpoint.md) {
     return true;
-  } else if (query === "lg" && width >= breakpoint.lg) {
+  } else if (query === 'lg' && width >= breakpoint.lg) {
     return true;
   }
   return false;
@@ -35,13 +39,13 @@ const matchMediaQuery = (
   query: PossibleQuery,
   width: number,
   height: number,
-  mediaQueryContext?: Readonly<MediaQueryConfig>
+  mediaQueryContext?: Partial<Readonly<MediaQueryConfig>>
 ) => {
   if (!query) {
     return false;
   }
 
-  if (typeof query === "string") {
+  if (typeof query === 'string') {
     return checkBreakpoint(width, query, mediaQueryContext);
   }
 
@@ -58,7 +62,7 @@ const matchMediaQuery = (
     orientation,
     platform,
   } = query;
-  const currentOrientation = width > height ? "landscape" : "portrait";
+  const currentOrientation = width > height ? 'landscape' : 'portrait';
 
   return (
     checkBreakpoint(width, breakpoint, mediaQueryContext) &&
@@ -72,11 +76,11 @@ const matchMediaQuery = (
 };
 
 const getStylesheet = <
-  T extends ExtendedNamedStyles<T> | ExtendedNamedStyles<any>
+  T extends ExtendedNamedStyles<T> | ExtendedNamedStyles<any>,
 >(
   styles: T,
   { width, height }: { width: number; height: number },
-  mediaQueryContext?: Readonly<MediaQueryConfig>
+  mediaQueryContext?: Partial<Readonly<MediaQueryConfig>>
 ): T => {
   return Object.fromEntries(
     Object.entries(styles).map(([styleKey, styleValue]) => {
@@ -99,7 +103,7 @@ const getStylesheet = <
   ) as T;
 };
 
-export default function useStylesheet<T>(
+export default function useStyleSheet<T>(
   styles: ExtendedNamedStyles<T> | ExtendedNamedStyles<any>
 ) {
   const dimensions = useWindowDimensions();
@@ -107,6 +111,6 @@ export default function useStylesheet<T>(
 
   return useMemo(
     () => getStylesheet(styles, dimensions, mediaQueryContext),
-    [dimensions, styles]
+    [dimensions, styles, mediaQueryContext]
   );
 }

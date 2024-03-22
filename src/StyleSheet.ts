@@ -1,8 +1,9 @@
-import { ImageStyle, StyleSheet, TextStyle, ViewStyle } from "react-native";
+import { StyleSheet } from 'react-native';
+import type { ImageStyle, TextStyle, ViewStyle } from 'react-native';
 
 type PossibleStyles = ViewStyle | TextStyle | ImageStyle;
 
-export type Breakpoints = "sm" | "md" | "lg";
+export type Breakpoints = 'sm' | 'md' | 'lg';
 
 export type PossibleQuery =
   | Breakpoints
@@ -16,8 +17,8 @@ export type PossibleQuery =
       maxAspectRatio?: number;
       minPixelRatio?: number;
       maxPixelRatio?: number;
-      orientation?: "landscape" | "portrait";
-      platform?: "ios" | "android" | "macos" | "windows" | "web";
+      orientation?: 'landscape' | 'portrait';
+      platform?: 'ios' | 'android' | 'macos' | 'windows' | 'web';
     };
 
 export type ExtendedPossibleStyles = PossibleStyles & {

@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { createContext } from 'react';
 
 export type MediaQueryConfig = {
   breakpoint: {
@@ -17,6 +17,8 @@ export const defaultMediaQueryConfig: Readonly<MediaQueryConfig> =
     },
   });
 
-const MediaQueryContext = createContext(defaultMediaQueryConfig);
+const MediaQueryContext = createContext(
+  defaultMediaQueryConfig as Partial<Readonly<MediaQueryConfig>>
+);
 
 export default MediaQueryContext;
