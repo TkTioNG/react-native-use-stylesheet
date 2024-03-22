@@ -60,3 +60,14 @@ yarn-error.log
 
 # testing
 /coverage
+
+# Build output
+lib
+
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
