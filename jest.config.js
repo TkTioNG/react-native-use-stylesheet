@@ -20,4 +20,5 @@ module.exports = {
     'jest-runner',
   ],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+  setupFilesAfterEnv: ['@testing-library/react-native/extend-expect'],
 };

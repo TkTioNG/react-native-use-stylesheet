@@ -5,24 +5,26 @@ type PossibleStyles = ViewStyle | TextStyle | ImageStyle;
 
 export type Breakpoints = 'sm' | 'md' | 'lg';
 
-export type PossibleQuery =
-  | Breakpoints
-  | {
-      breakpoint?: Breakpoints;
-      minWidth?: number;
-      maxWidth?: number;
-      minHeight?: number;
-      maxHeight?: number;
-      minAspectRatio?: number;
-      maxAspectRatio?: number;
-      minPixelRatio?: number;
-      maxPixelRatio?: number;
-      orientation?: 'landscape' | 'portrait';
-      platform?: 'ios' | 'android' | 'macos' | 'windows' | 'web';
-    };
+export type PossibleQuery = {
+  breakpoint?: Breakpoints;
+  minWidth?: number;
+  maxWidth?: number;
+  minHeight?: number;
+  maxHeight?: number;
+  minAspectRatio?: number;
+  maxAspectRatio?: number;
+  minPixelRatio?: number;
+  maxPixelRatio?: number;
+  minFontScale?: number;
+  maxFontScale?: number;
+  orientation?: 'landscape' | 'portrait';
+  platform?: 'ios' | 'android' | 'macos' | 'windows' | 'web';
+};
+
+export type PossibleQueryStyles = Breakpoints | PossibleQuery;
 
 export type ExtendedPossibleStyles = PossibleStyles & {
-  mediaQueries?: (PossibleStyles & { query: PossibleQuery })[];
+  mediaQueries?: (PossibleStyles & { query: PossibleQueryStyles })[];
 };
 
 export type ExtendedNamedStyles<T> = {

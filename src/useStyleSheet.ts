@@ -1,9 +1,9 @@
 import { useContext, useMemo } from 'react';
-import { PixelRatio, Platform, useWindowDimensions } from 'react-native';
+import { Platform, useWindowDimensions, type ScaledSize } from 'react-native';
 import type {
   Breakpoints,
   ExtendedNamedStyles,
-  PossibleQuery,
+  PossibleQueryStyles,
 } from './StyleSheet';
 import MediaQueryContext, {
   defaultMediaQueryConfig,
@@ -35,15 +35,16 @@ const checkBreakpoint = (
   return false;
 };
 
-const matchMediaQuery = (
-  query: PossibleQuery,
-  width: number,
-  height: number,
+export const matchMediaQuery = (
+  query: PossibleQueryStyles,
+  dimensions: ScaledSize,
   mediaQueryContext?: Partial<Readonly<MediaQueryConfig>>
 ) => {
   if (!query) {
     return false;
   }
+
+  const { width, height, scale, fontScale } = dimensions;
 
   if (typeof query === 'string') {
     return checkBreakpoint(width, query, mediaQueryContext);
@@ -59,6 +60,8 @@ const matchMediaQuery = (
     maxAspectRatio,
     minPixelRatio,
     maxPixelRatio,
+    minFontScale,
+    maxFontScale,
     orientation,
     platform,
   } = query;
@@ -69,7 +72,8 @@ const matchMediaQuery = (
     isInInterval(width, minWidth, maxWidth) &&
     isInInterval(height, minHeight, maxHeight) &&
     isInInterval(width / height, minAspectRatio, maxAspectRatio) &&
-    isInInterval(PixelRatio.get(), minPixelRatio, maxPixelRatio) &&
+    isInInterval(scale, minPixelRatio, maxPixelRatio) &&
+    isInInterval(fontScale, minFontScale, maxFontScale) &&
     (orientation === undefined || orientation === currentOrientation) &&
     (platform === undefined || platform === Platform.OS)
   );
@@ -79,7 +83,7 @@ const getStylesheet = <
   T extends ExtendedNamedStyles<T> | ExtendedNamedStyles<any>,
 >(
   styles: T,
-  { width, height }: { width: number; height: number },
+  dimensions: ScaledSize,
   mediaQueryContext?: Partial<Readonly<MediaQueryConfig>>
 ): T => {
   return Object.fromEntries(
@@ -90,7 +94,7 @@ const getStylesheet = <
       if (mediaQueries?.length) {
         mediaQueries.forEach((mediaQuery) => {
           const { query, ...queryStyle } = mediaQuery;
-          if (matchMediaQuery(query, width, height, mediaQueryContext)) {
+          if (matchMediaQuery(query, dimensions, mediaQueryContext)) {
             mergedStyle.push(queryStyle);
           }
         });

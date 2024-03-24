@@ -404,13 +404,18 @@ describe('useStyleSheet', () => {
       style1: {
         color: 'white',
         mediaQueries: [
-          { query: { minPixelRatio: 1 }, color: 'red' },
-          { query: { minPixelRatio: 1.5, maxPixelRatio: 2 }, color: 'blue' },
+          { query: { minPixelRatio: 1.5 }, color: 'red' },
+          { query: { minPixelRatio: 2, maxPixelRatio: 2.5 }, color: 'blue' },
         ],
       },
     });
 
-    jest.spyOn(ReactNative.PixelRatio, 'get').mockImplementation(() => 0.5);
+    jest.spyOn(ReactNative, 'useWindowDimensions').mockImplementation(() => ({
+      width: 50,
+      height: 100,
+      scale: 1,
+      fontScale: 1,
+    }));
     let expected = {
       style1: {
         color: 'white',
@@ -419,7 +424,12 @@ describe('useStyleSheet', () => {
     let { result } = renderHook(() => useStyleSheet(styles));
     expect(result.current).toStrictEqual(expected);
 
-    jest.spyOn(ReactNative.PixelRatio, 'get').mockImplementation(() => 1);
+    jest.spyOn(ReactNative, 'useWindowDimensions').mockImplementation(() => ({
+      width: 50,
+      height: 100,
+      scale: 1.5,
+      fontScale: 1,
+    }));
     expected = {
       style1: {
         color: 'red',
@@ -428,7 +438,12 @@ describe('useStyleSheet', () => {
     ({ result } = renderHook(() => useStyleSheet(styles)));
     expect(result.current).toStrictEqual(expected);
 
-    jest.spyOn(ReactNative.PixelRatio, 'get').mockImplementation(() => 1.5);
+    jest.spyOn(ReactNative, 'useWindowDimensions').mockImplementation(() => ({
+      width: 50,
+      height: 100,
+      scale: 2,
+      fontScale: 1,
+    }));
     expected = {
       style1: {
         color: 'blue',
@@ -437,7 +452,80 @@ describe('useStyleSheet', () => {
     ({ result } = renderHook(() => useStyleSheet(styles)));
     expect(result.current).toStrictEqual(expected);
 
-    jest.spyOn(ReactNative.PixelRatio, 'get').mockImplementation(() => 2.5);
+    jest.spyOn(ReactNative, 'useWindowDimensions').mockImplementation(() => ({
+      width: 50,
+      height: 100,
+      scale: 3,
+      fontScale: 1,
+    }));
+    expected = {
+      style1: {
+        color: 'red',
+      },
+    };
+    ({ result } = renderHook(() => useStyleSheet(styles)));
+    expect(result.current).toStrictEqual(expected);
+  });
+
+  it('should accept min max font scale query correctly', () => {
+    const styles = StyleSheet.create({
+      style1: {
+        color: 'white',
+        mediaQueries: [
+          { query: { minFontScale: 1.5 }, color: 'red' },
+          { query: { minFontScale: 2, maxFontScale: 2.5 }, color: 'blue' },
+        ],
+      },
+    });
+
+    jest.spyOn(ReactNative, 'useWindowDimensions').mockImplementation(() => ({
+      width: 50,
+      height: 100,
+      scale: 1,
+      fontScale: 1,
+    }));
+    let expected = {
+      style1: {
+        color: 'white',
+      },
+    };
+    let { result } = renderHook(() => useStyleSheet(styles));
+    expect(result.current).toStrictEqual(expected);
+
+    jest.spyOn(ReactNative, 'useWindowDimensions').mockImplementation(() => ({
+      width: 100,
+      height: 100,
+      scale: 1,
+      fontScale: 1.5,
+    }));
+    expected = {
+      style1: {
+        color: 'red',
+      },
+    };
+    ({ result } = renderHook(() => useStyleSheet(styles)));
+    expect(result.current).toStrictEqual(expected);
+
+    jest.spyOn(ReactNative, 'useWindowDimensions').mockImplementation(() => ({
+      width: 150,
+      height: 100,
+      scale: 1,
+      fontScale: 2,
+    }));
+    expected = {
+      style1: {
+        color: 'blue',
+      },
+    };
+    ({ result } = renderHook(() => useStyleSheet(styles)));
+    expect(result.current).toStrictEqual(expected);
+
+    jest.spyOn(ReactNative, 'useWindowDimensions').mockImplementation(() => ({
+      width: 201,
+      height: 100,
+      scale: 1,
+      fontScale: 3,
+    }));
     expected = {
       style1: {
         color: 'red',
