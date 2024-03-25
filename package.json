@@ -1,6 +1,6 @@
 {
   "name": "react-native-use-stylesheet",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Responsive StyleSheet for React Native",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",

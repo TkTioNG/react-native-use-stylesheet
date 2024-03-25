@@ -42,7 +42,7 @@ yarn add react-native-use-stylesheet
 It will be the same as how you style with React Native built-in `StyleSheet`.
 
 ```tsx
-import { StyleSheet, useStyleSheet } from "react-native-use-stylesheet";
+import { StyleSheet, useStyleSheet } from 'react-native-use-stylesheet';
 
 export default function MyComponent() {
   const queryStyles = useStyleSheet(styles);
@@ -52,11 +52,11 @@ export default function MyComponent() {
 
 const styles = StyleSheet.create({
   wrapper: {
-    flexDirection: "column",
+    flexDirection: 'column',
     mediaQueries: [
       {
-        query: { breakpoint: "lg" },
-        flexDirection: "row", // Change direction for larger screen
+        query: { breakpoint: 'lg' },
+        flexDirection: 'row', // Change direction for larger screen
       },
     ],
   },
@@ -85,21 +85,23 @@ It accepts the same styling object as `StyleSheet.create()` with extended proper
 | :----------: | :---------------------: | :----------------------------------------------------- |
 | mediaQueries | `PossibleQueryStyles[]` | An array of styles with `query` property. _(optional)_ |
 
-**PossibleQueryStyles**
+### PossibleQueryStyles
 
-|      Name      |           Type            | Description                                        |
-| :------------: | :-----------------------: | :------------------------------------------------- |
-|   breakpoint   |   `sm` \| `md` \| `lg`    | Breakpoint based on the window width. _(optional)_ |
-|    minWidth    |         `number`          | Min width of the window. _(optional)_              |
-|    maxWidth    |         `number`          | Max width of the window. _(optional)_              |
-|   minHeight    |         `number`          | Min height of the window. _(optional)_             |
-|   maxHeight    |         `number`          | Max height of the window. _(optional)_             |
-| minAspectRatio |         `number`          | Min aspect ratio of the window. _(optional)_       |
-| maxAspectRatio |         `number`          | Max aspect ratio of the window. _(optional)_       |
-| minPixelRatio  |         `number`          | Min pixel ratio of the device. _(optional)_        |
-| maxPixelRatio  |         `number`          | Max pixel ratio of the device. _(optional)_        |
-|  orientation   | `landscape` \| `portrait` | Current orientation of the device. _(optional)_    |
-|    platform    |       `Platform.OS`       | OS platform of the device. _(optional)_            |
+|      Name      |               Type               | Description                                                          |
+| :------------: | :------------------------------: | :------------------------------------------------------------------- |
+|   breakpoint   |       `sm` \| `md` \| `lg`       | Breakpoint based on the window width. _(optional)_                   |
+|    minWidth    |             `number`             | Min width of the window. _(optional)_                                |
+|    maxWidth    |             `number`             | Max width of the window. _(optional)_                                |
+|   minHeight    |             `number`             | Min height of the window. _(optional)_                               |
+|   maxHeight    |             `number`             | Max height of the window. _(optional)_                               |
+| minAspectRatio |             `number`             | Min aspect ratio of the window. _(optional)_                         |
+| maxAspectRatio |             `number`             | Max aspect ratio of the window. _(optional)_                         |
+| minPixelRatio  |             `number`             | Min pixel ratio of the device. _(optional)_                          |
+| maxPixelRatio  |             `number`             | Max pixel ratio of the device. _(optional)_                          |
+|  minFontScale  |             `number`             | Min font scale of the device. _(optional)_                           |
+|  maxFontScale  |             `number`             | Max font scale of the device. _(optional)_                           |
+|  orientation   |    `landscape` \| `portrait`     | Current orientation of the device. _(optional)_                      |
+|    platform    | `Platform.OS` \| `Platform.OS[]` | OS of the device, it can be a string or an array of OS. _(optional)_ |
 
 ### Example
 
@@ -110,18 +112,18 @@ You can put in multiple queries in the `query` properties, they will be treated 
 ```tsx
 const styles = StyleSheet.create({
   wrapper: {
-    backgroundColor: "white",
-    flexDirection: "column",
+    backgroundColor: 'white',
+    flexDirection: 'column',
     mediaQueries: [
       {
         // Change flex direction for larger screen
-        query: { breakpoint: "lg" },
-        flexDirection: "row",
+        query: { breakpoint: 'lg' },
+        flexDirection: 'row',
       },
       {
         // Change backgroundColor for landscape and device with min pixel ratio of 2.5
-        query: { orientation: "landscape", minPixelRatio: 2.5 },
-        backgroundColor: "black",
+        query: { orientation: 'landscape', minPixelRatio: 2.5 },
+        backgroundColor: 'black',
       },
     ],
   },
@@ -133,17 +135,17 @@ Furthermore, you can use breakpoint shorthand for `query`, i.e.:
 ```tsx
 const styles = StyleSheet.create({
   wrapper: {
-    color: "white",
+    color: 'white',
     mediaQueries: [
       {
         // Change text to red for medium breakpoint
-        query: "md",
-        color: "red",
+        query: 'md',
+        color: 'red',
       },
       {
         // Change text to blue for large breakpoint
-        query: "lg",
-        color: "blue",
+        query: 'lg',
+        color: 'blue',
       },
     ],
   },
@@ -175,17 +177,17 @@ function MyComponent() {
 // Example styles
 const styles = StyleSheet.create({
   wrapper: {
-    color: "white",
+    color: 'white',
     mediaQueries: [
       {
         // Change text to red for medium breakpoint
-        query: "md",
-        color: "red",
+        query: 'md',
+        color: 'red',
       },
       {
         // Change text to blue for large breakpoint
-        query: "lg",
-        color: "blue",
+        query: 'lg',
+        color: 'blue',
       },
     ],
   },
@@ -194,9 +196,36 @@ const styles = StyleSheet.create({
 
 As you can see from the above example, all styling in the `mediaQueries` array will be merged back to the base style based on the condition of the device and its media queries.
 
+## MediaQueryComponent
+
+`<MediaQueryComponent />` will only render the children when media queries pass in are true. The media query properties are [`PossibleQueryStyles`](#possiblequerystyles).
+
+### Example
+
+It is the same with `query` property in `mediaQueries`, you can place multiple conditions in the component. They will be treated with `AND` condition.
+
+If the media queries are not matched, nothing will be rendered.
+
+```tsx
+// Only shown when width is shorter than 600 and for ios/android device only
+<MediaQueryComponent maxWidth={600} platform={['ios', 'android']}>
+  <Children />
+</MediaQueryComponent>
+```
+
+You can define a fallback component to render if the media query are not matched too.
+
+```tsx
+// If the orientation is landscape, <Landscape /> component will be rendered,
+// else if it is portrait, fallback <Portrait /> will be rendered.
+<MediaQueryComponent orientation="landscape" fallback={<Portrait />}>
+  <Landscape />
+</MediaQueryComponent>
+```
+
 ## MediaQueryContext
 
-It allows the user to modify the base media query configurations of this library.
+It allows the user to modify the base media query configurations of this library through Reract context.
 
 ### Base Configurations
 
@@ -213,7 +242,7 @@ It allows the user to modify the base media query configurations of this library
 ### Example
 
 ```tsx
-import { MediaQueryContext } from "react-native-use-stylesheet";
+import { MediaQueryContext } from 'react-native-use-stylesheet';
 
 // Set a new breakpoints
 const mediaQueryConfig = {
