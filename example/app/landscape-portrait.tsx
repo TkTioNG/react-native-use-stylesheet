@@ -1,15 +1,31 @@
-import { Text, View } from 'react-native';
-import { StyleSheet, useStyleSheet } from 'react-native-use-stylesheet';
+import Stack from 'expo-router/stack';
+import { ImageBackground, Text, View } from 'react-native';
+import {
+  MediaQueryComponent,
+  StyleSheet,
+  useStyleSheet,
+} from 'react-native-use-stylesheet';
+
+import galaxyBg from '../assets/galaxy-bg.jpg';
 
 export default function Orientation() {
   const queryStyle = useStyleSheet(styles);
 
   return (
     <View style={queryStyle.container}>
+      <Stack.Screen options={{ title: 'Orientation' }} />
       <Text style={queryStyle.titleText}>Change the device orientation.</Text>
       <View style={queryStyle.formContainer}>
+        <ImageBackground
+          source={galaxyBg}
+          resizeMode="cover"
+          style={queryStyle.bgImage}
+        />
         <View style={queryStyle.formWrapper}>
           <View style={queryStyle.inputContainer}>
+            <MediaQueryComponent minHeight={500}>
+              <Text style={queryStyle.welcomeText}>Welcome</Text>
+            </MediaQueryComponent>
             <View style={queryStyle.inputWrapper}>
               <Text style={queryStyle.inputText}>Name</Text>
             </View>
@@ -35,7 +51,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#1b1b1d',
     flex: 1,
-    paddingTop: 24,
+    paddingTop: 16,
   },
   titleText: {
     color: 'white',
@@ -45,7 +61,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   formContainer: {
-    backgroundColor: '#25c2a0',
+    backgroundColor: '#065f46',
     flex: 1,
     mediaQueries: [
       {
@@ -54,6 +70,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
       },
     ],
+    overflow: 'hidden',
+    position: 'relative',
+  },
+  bgImage: {
+    opacity: 0.2,
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
   },
   formWrapper: {
     mediaQueries: [
@@ -108,6 +133,22 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         fontSize: 24,
         opacity: 0.8,
+      },
+    ],
+  },
+  welcomeText: {
+    fontSize: 36,
+    color: '#f59e0b',
+    fontStyle: 'italic',
+    letterSpacing: 2,
+    fontWeight: '600',
+    textAlign: 'center',
+    marginBottom: 20,
+    mediaQueries: [
+      {
+        query: { orientation: 'portrait' },
+        marginTop: -20,
+        marginBottom: 40,
       },
     ],
   },

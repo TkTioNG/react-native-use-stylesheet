@@ -1,12 +1,14 @@
 import { Link } from 'expo-router';
-import { Pressable, Text, View } from 'react-native';
+import Stack from 'expo-router/stack';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 import { StyleSheet, useStyleSheet } from 'react-native-use-stylesheet';
 
 export default function App() {
   const queryStyle = useStyleSheet(styles);
 
   return (
-    <View style={queryStyle.container}>
+    <ScrollView style={queryStyle.container}>
+      <Stack.Screen options={{ title: 'Example List' }} />
       <Text style={queryStyle.titleText}>Example App</Text>
       <Text style={queryStyle.packageText}>react-native-use-stylesheet</Text>
       <Text style={queryStyle.description}>
@@ -49,7 +51,7 @@ export default function App() {
           </Pressable>
         </Link>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -57,7 +59,6 @@ const styles = StyleSheet.create({
   container: {
     padding: 24,
     backgroundColor: '#1b1b1d',
-    flex: 1,
   },
   buttonList: {
     flexDirection: 'column',

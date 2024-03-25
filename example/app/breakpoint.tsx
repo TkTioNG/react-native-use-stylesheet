@@ -1,3 +1,4 @@
+import Stack from 'expo-router/stack';
 import { Text, View, useWindowDimensions } from 'react-native';
 import { StyleSheet, useStyleSheet } from 'react-native-use-stylesheet';
 
@@ -7,6 +8,7 @@ export default function Breakpoint() {
 
   return (
     <View style={queryStyle.container}>
+      <Stack.Screen options={{ headerTitle: 'Breakpoint' }} />
       <Text style={queryStyle.titleText}>
         Change the window width to view different background color at each
         breakpoint.
@@ -36,12 +38,13 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#1b1b1d',
     flex: 1,
-    paddingTop: 24,
+    paddingTop: 16,
   },
   wrapper: {
     backgroundColor: '#25c2a0',
     flex: 1,
     position: 'relative',
+    overflow: 'hidden',
     mediaQueries: [
       { query: 'sm', backgroundColor: '#c084fc' },
       { query: 'md', backgroundColor: '#22d3ee' },
