@@ -75,7 +75,10 @@ export const matchMediaQuery = (
     isInInterval(scale, minPixelRatio, maxPixelRatio) &&
     isInInterval(fontScale, minFontScale, maxFontScale) &&
     (orientation === undefined || orientation === currentOrientation) &&
-    (platform === undefined || platform === Platform.OS)
+    (platform === undefined ||
+      (Array.isArray(platform)
+        ? platform.includes(Platform.OS)
+        : platform === Platform.OS))
   );
 };
 

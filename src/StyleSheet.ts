@@ -5,6 +5,8 @@ type PossibleStyles = ViewStyle | TextStyle | ImageStyle;
 
 export type Breakpoints = 'sm' | 'md' | 'lg';
 
+type Platform = 'ios' | 'android' | 'macos' | 'windows' | 'web';
+
 export type PossibleQuery = {
   breakpoint?: Breakpoints;
   minWidth?: number;
@@ -18,7 +20,7 @@ export type PossibleQuery = {
   minFontScale?: number;
   maxFontScale?: number;
   orientation?: 'landscape' | 'portrait';
-  platform?: 'ios' | 'android' | 'macos' | 'windows' | 'web';
+  platform?: Platform | Platform[];
 };
 
 export type PossibleQueryStyles = Breakpoints | PossibleQuery;

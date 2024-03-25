@@ -620,6 +620,42 @@ describe('useStyleSheet', () => {
     expect(result.current).toStrictEqual(expected);
   });
 
+  it('should accept platform query as an array correctly', () => {
+    const styles = StyleSheet.create({
+      style1: {
+        color: 'white',
+        mediaQueries: [
+          { query: { platform: ['ios', 'android'] }, color: 'red' },
+        ],
+      },
+    });
+
+    // ios
+    Platform.OS = 'ios';
+    let expected = {
+      style1: {
+        color: 'red',
+      },
+    };
+    let { result } = renderHook(() => useStyleSheet(styles));
+    expect(result.current).toStrictEqual(expected);
+
+    // android
+    Platform.OS = 'android';
+    ({ result } = renderHook(() => useStyleSheet(styles)));
+    expect(result.current).toStrictEqual(expected);
+
+    // web
+    Platform.OS = 'web';
+    expected = {
+      style1: {
+        color: 'white',
+      },
+    };
+    ({ result } = renderHook(() => useStyleSheet(styles)));
+    expect(result.current).toStrictEqual(expected);
+  });
+
   it('should chain all queries together', () => {
     const styles = StyleSheet.create({
       style1: {
