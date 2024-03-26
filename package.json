@@ -1,7 +1,7 @@
 {
   "name": "react-native-use-stylesheet",
   "version": "0.0.2",
-  "description": "Responsive StyleSheet for React Native",
+  "description": "Responsive StyleSheet for React Native, Just Testing",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
   "types": "lib/typescript/src/index.d.ts",
