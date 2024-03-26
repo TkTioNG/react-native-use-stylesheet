@@ -11,7 +11,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.tktiong.reactnativeusestylesheetexample"
@@ -25,10 +27,13 @@
     },
     "web": {
       "favicon": "./assets/favicon.png",
-      "bundler": "metro"
+      "bundler": "metro",
+      "output": "single"
     },
     "scheme": "react-native-use-stylesheet-example",
-    "plugins": ["expo-router"],
+    "plugins": [
+      "expo-router"
+    ],
     "extra": {
       "router": {
         "origin": false
@@ -40,6 +45,12 @@
     "owner": "tktiong",
     "experiments": {
       "baseUrl": "/react-native-use-stylesheet"
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/1984ffbb-fcef-4163-8441-7a99397a3179"
     }
   }
 }

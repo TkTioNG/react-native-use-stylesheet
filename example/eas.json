@@ -1,6 +1,16 @@
 {
   "build": {
+    "development": {
+      "android": {
+        "buildType": "apk"
+      },
+      "ios": {
+        "simulator": true
+      },
+      "developmentClient": true
+    },
     "preview": {
+      "channel": "preview",
       "android": {
         "buildType": "apk"
       },
@@ -12,9 +22,5 @@
   },
   "cli": {
     "version": "^7.6.0"
-  },
-  "web": {
-    "output": "single",
-    "bundler": "metro"
   }
 }
