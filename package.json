@@ -29,7 +29,7 @@
     "test": "jest",
     "test:cov": "jest --coverage",
     "test:watch": "jest --watch",
-    "typecheck": "tsc --noEmit --excludeDirectories example",
+    "typecheck": "tsc --noEmit --project ./tsconfig.spec.json",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "clean": "del-cli lib",
     "build": "bob build",
