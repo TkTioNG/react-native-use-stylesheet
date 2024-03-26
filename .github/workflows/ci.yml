@@ -63,7 +63,8 @@ jobs:
         with:
           command: eas update --auto --branch ${{ github.event.pull_request.head.ref }} --non-interactive
           working-directory: example
-          comment: false
+          comment: true
+          comment-id: ${{ github.event.pull_request.head.ref }}
 
   preview:
     if: github.ref == 'refs/heads/main'
