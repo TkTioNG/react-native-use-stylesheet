@@ -73,7 +73,9 @@ jobs:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
       - name: 🚀 Create demo
-        run: eas update --channel preview --message="Demo update" --non-interactive
+        run: |
+          cd example
+          eas update --channel preview --message="Demo update" --non-interactive
 
   web-demo:
     if: github.ref == 'refs/heads/main'
