@@ -10,9 +10,10 @@ on:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
+  pull-requests: write
 
 jobs:
   lint:
@@ -61,9 +62,10 @@ jobs:
       - name: 🚀 Create development preview
         uses: expo/expo-github-action/preview@v8
         with:
-          command: eas update --auto --non-interactive
+          command: eas update --auto --branch ${{ github.event.pull_request.head.ref }} --non-interactive
           working-directory: example
-          comment: false
+          comment: true
+          comment-id: ${{ github.event.pull_request.head.ref }}
 
   preview:
     if: github.ref == 'refs/heads/main'
